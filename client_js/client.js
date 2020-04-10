@@ -19,7 +19,7 @@ function askForTime(n) {
 }
 
 function buildPingMessage() {
-    console.log("JS client sending ping message..")
+    console.log("JS client_golang sending ping message..")
     return {
         message: "What is the time?"
     };
@@ -27,7 +27,7 @@ function buildPingMessage() {
 
 function listenForResponse() {
     call.on("data", pong => {
-        console.log("JS client received a response: " + pong.message)
+        console.log("JS client_golang received a response: " + pong.message)
     });
 }
 

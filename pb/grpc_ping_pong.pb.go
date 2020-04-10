@@ -132,7 +132,7 @@ var _ grpc.ClientConnInterface
 // is compatible with the grpc package it is being compiled against.
 const _ = grpc.SupportPackageIsVersion6
 
-// PingPongServiceClient is the client API for PingPongService service.
+// PingPongServiceClient is the client_golang API for PingPongService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type PingPongServiceClient interface {
