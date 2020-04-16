@@ -3,30 +3,34 @@ package main
 import (
 	"context"
 	"fmt"
-	pingPongProto "github.com/juricaKenda/gRPC-PoC/pb"
+	pingPongProto "github.com/juricaKenda/gRPC-PoC/simple/pb"
 	"google.golang.org/grpc"
-	"time"
 )
 
 func Chat(stream pingPongProto.PingPongService_ChatClient) error {
 	fmt.Println("Client booting..")
+	err := stream.Send(message("golang_client"))
+	if err != nil {
+		panicOnError(err, "Client failed to notify the server about the established connection")
+	}
 	for {
-		pingMessage := buildPingMessage()
-		fmt.Println("Client sending: " + pingMessage.String())
-		err := stream.Send(pingMessage)
-		panicOnError(err, "Client failed to send a message..")
-
 		pong, err := stream.Recv()
 		panicOnError(err, "Client failed to receive a message..")
 		fmt.Println("Client received: " + pong.String())
-
-		time.Sleep(time.Second)
+		if pong.Message == "Current temperature is : 0" {
+			askIfSnowing(stream)
+		}
 	}
 }
 
-func buildPingMessage() *pingPongProto.Ping {
+func askIfSnowing(stream pingPongProto.PingPongService_ChatClient) {
+	err := stream.Send(message("Wow is it snowing?"))
+	panicOnError(err, "Client failed to send a message..")
+}
+
+func message(message string) *pingPongProto.Ping {
 	return &pingPongProto.Ping{
-		Message: "What time is it?",
+		Message: message,
 	}
 }
 
@@ -51,12 +55,9 @@ func main() {
 	defer closeConnection(serverConnection)
 	panicOnError(err, "Could not establish gRPC server connection...")
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-
 	pingerClient := pingPongProto.NewPingPongServiceClient(serverConnection)
 
-	client, err := pingerClient.Chat(ctx)
+	client, err := pingerClient.Chat(context.Background())
 	panicOnError(err, "Client stub issue occurred..")
 
 	_ = Chat(client)

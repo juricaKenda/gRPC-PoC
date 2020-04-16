@@ -1,6 +1,6 @@
 const grpc = require("grpc");
 const loader = require("@grpc/proto-loader");
-const pkg = loader.loadSync("proto/grpc_ping_pong.proto", {});
+const pkg = loader.loadSync("../proto/grpc_ping_pong.proto", {});
 const grpcObject = grpc.loadPackageDefinition(pkg);
 const pingPongPackage = grpcObject.pingPongPackage;
 
@@ -9,19 +9,11 @@ const client = new pingPongPackage.PingPongService("localhost:50000", grpc.crede
 
 const call = client.Chat();
 
-function askForTime(n) {
-    let ping = buildPingMessage();
-    call.write(ping);
 
-    if (n > 0) {
-        setTimeout(() => askForTime(n - 1), 1000);
-    }
-}
-
-function buildPingMessage() {
-    console.log("JS client_golang sending ping message..")
+function notifyAboutTheListening() {
+    console.log("Node client sending listening message..")
     return {
-        message: "What is the time?"
+        message: "node_client"
     };
 }
 
@@ -31,7 +23,9 @@ function listenForResponse() {
     });
 }
 
-askForTime(10);
+
+let ping = notifyAboutTheListening();
+call.write(ping);
 
 listenForResponse();
 
