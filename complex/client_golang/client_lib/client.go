@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	proto "github.com/juricaKenda/gRPC-PoC/complex/pb"
+	"io"
+	"time"
 )
 
 type ListenerCtx struct {
@@ -11,21 +13,31 @@ type ListenerCtx struct {
 	ID     proto.ListenerID
 }
 
-func NewListenerContext(client proto.SubscriberClient) *ListenerCtx {
+func NewListenerContext(client proto.SubscriberClient, name string) *ListenerCtx {
 	return &ListenerCtx{
 		Client: client,
 		ID: proto.ListenerID{
-			Id: "golang_client",
+			Id: name,
 		},
 	}
 }
 
-func (ctx *ListenerCtx) RequestTopic(topic string) {
+func (ctx *ListenerCtx) RequestTopicAfter(topic string, duration time.Duration) {
+	time.Sleep(duration)
 	confirmation, err := ctx.Client.RequestTopic(context.Background(), ctx.buildRequest(topic))
 	panicIfErr(err, "Issue occurred while requesting a topic")
 	fmt.Println(confirmation.Body)
 }
 
+func (ctx *ListenerCtx) Listen() {
+	for {
+		//ctx.Poll()
+		time.Sleep(2 * time.Second)
+	}
+}
+func isEOF(err error) bool {
+	return err == io.EOF
+}
 func panicIfErr(err error, message string) {
 	if err != nil {
 		fmt.Println(message)
@@ -40,12 +52,14 @@ func (ctx *ListenerCtx) buildRequest(topic string) *proto.Request {
 	}
 }
 
-func (ctx *ListenerCtx) ListenTopics() {
+func (ctx *ListenerCtx) Poll() {
 	stream, err := ctx.Client.ListenTopic(context.Background(), &ctx.ID)
 	panicIfErr(err, "Issue occurred while listening to topics")
-
 	for {
 		updateMessage, err := stream.Recv()
+		if isEOF(err) {
+			break
+		}
 		panicIfErr(err, "Issue occurred while receiving topic update")
 		fmt.Println(updateMessage)
 	}
