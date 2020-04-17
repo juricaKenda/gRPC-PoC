@@ -27,7 +27,7 @@ func (t *timepub) NotifyAll() {
 	message := time.Now().String()
 
 	for _, sub := range t.subscribers {
-		sub.Receive(message, t.tag)
+		sub.Receive(message)
 	}
 }
 

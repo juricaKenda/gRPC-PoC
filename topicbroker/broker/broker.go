@@ -29,7 +29,7 @@ func (tb *TopicBroker) Start() {
 	tb.Test()
 }
 
-func (r *Receiver) Receive(message, pubTag string) {
+func (r *Receiver) Receive(message string) {
 	r.messages <- message
 }
 

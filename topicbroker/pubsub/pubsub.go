@@ -7,5 +7,5 @@ type Publisher interface {
 }
 
 type Subscriber interface {
-	Receive(message, pubTag string)
+	Receive(message string)
 }

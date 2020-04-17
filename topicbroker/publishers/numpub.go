@@ -26,7 +26,7 @@ func (n *numpub) Start() {
 func (n *numpub) NotifyAll() {
 	message := "123"
 	for _, sub := range n.subscribers {
-		sub.Receive(message, n.tag)
+		sub.Receive(message)
 	}
 }
 
