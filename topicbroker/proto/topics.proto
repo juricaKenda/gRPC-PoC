@@ -1,0 +1,10 @@
+syntax = "proto3";
+package topics;
+
+service TopicService{
+  rpc Pull(Message) returns (stream Message){}
+}
+
+message Message{
+  string body = 1;
+}
