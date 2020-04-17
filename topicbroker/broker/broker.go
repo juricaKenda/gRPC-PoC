@@ -4,14 +4,12 @@ import (
 	"fmt"
 	"github.com/juricaKenda/gRPC-PoC/topicbroker/publishers"
 	"github.com/juricaKenda/gRPC-PoC/topicbroker/pubsub"
+	"github.com/juricaKenda/gRPC-PoC/topicbroker/receiver"
 )
 
 type TopicBroker struct {
 	timepub pubsub.Publisher
 	numpub  pubsub.Publisher
-}
-type Receiver struct {
-	messages chan string
 }
 
 func NewTopicBroker() *TopicBroker {
@@ -29,18 +27,12 @@ func (tb *TopicBroker) Start() {
 	tb.Test()
 }
 
-func (r *Receiver) Receive(message string) {
-	r.messages <- message
-}
-
 func (tb *TopicBroker) Test() {
-	receiver := &Receiver{
-		messages: make(chan string),
-	}
-	tb.numpub.Subscribe(receiver)
+	rcvr := receiver.NewMessageReceiver()
+	tb.numpub.Subscribe(rcvr)
 
 	for {
-		message := <-receiver.messages
+		message := <-rcvr.Next()
 		fmt.Println(fmt.Sprintf("Got a message: %s", message))
 	}
 
