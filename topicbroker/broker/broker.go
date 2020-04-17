@@ -2,38 +2,46 @@ package broker
 
 import (
 	"fmt"
+	"github.com/juricaKenda/gRPC-PoC/topicbroker/publishers"
+	"github.com/juricaKenda/gRPC-PoC/topicbroker/pubsub"
 )
 
 type TopicBroker struct {
-	timeChan chan string
-	numChan  chan string
+	timepub pubsub.Publisher
+	numpub  pubsub.Publisher
+}
+type Receiver struct {
+	messages chan string
 }
 
 func NewTopicBroker() *TopicBroker {
 	broker := new(TopicBroker)
-	broker.timeChan = make(chan string, 1)
-	broker.numChan = make(chan string, 1)
+	broker.timepub = publishers.NewTimePublisher()
+	broker.timepub.Start()
+
+	broker.numpub = publishers.NewNumberPublisher()
+	broker.numpub.Start()
 	return broker
 }
 
 func (tb *TopicBroker) Start() {
 	fmt.Println("Topic broker starting..")
-	for {
-		select {
-		case _ = <-tb.timeChan:
-			fmt.Println("received time!")
-		case _ = <-tb.numChan:
-			fmt.Println("received number!")
-
-		}
-	}
+	tb.Test()
 }
 
-func (tb *TopicBroker) Receive(message, pubTag string) {
-	switch pubTag {
-	case "time_publisher":
-		tb.timeChan <- message
-	case "num_publisher":
-		tb.numChan <- message
+func (r *Receiver) Receive(message, pubTag string) {
+	r.messages <- message
+}
+
+func (tb *TopicBroker) Test() {
+	receiver := &Receiver{
+		messages: make(chan string),
 	}
+	tb.numpub.Subscribe(receiver)
+
+	for {
+		message := <-receiver.messages
+		fmt.Println(fmt.Sprintf("Got a message: %s", message))
+	}
+
 }
