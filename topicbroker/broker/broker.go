@@ -11,7 +11,8 @@ type TopicBroker struct {
 
 func NewTopicBroker() *TopicBroker {
 	broker := new(TopicBroker)
-
+	broker.timeChan = make(chan string)
+	broker.numChan = make(chan string)
 	return broker
 }
 
@@ -20,5 +21,10 @@ func (tb *TopicBroker) Start() {
 }
 
 func (tb *TopicBroker) Receive(message, pubTag string) {
-	panic("implement me")
+	switch pubTag {
+	case "time_publisher":
+		tb.timeChan <- message
+	case "num_publisher":
+		tb.numChan <- message
+	}
 }
