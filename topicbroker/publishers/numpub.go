@@ -8,11 +8,13 @@ import (
 
 type numpub struct {
 	subscribers []pubsub.Subscriber
+	tag         string
 }
 
 func NewNumberPublisher() pubsub.Publisher {
 	return &numpub{
 		subscribers: make([]pubsub.Subscriber, 0),
+		tag:         "number_publisher",
 	}
 }
 
@@ -24,7 +26,7 @@ func (n *numpub) Start() {
 func (n *numpub) NotifyAll() {
 	message := "123"
 	for _, sub := range n.subscribers {
-		sub.Receive(message)
+		sub.Receive(message, n.tag)
 	}
 }
 

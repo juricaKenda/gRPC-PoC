@@ -8,11 +8,13 @@ import (
 
 type timepub struct {
 	subscribers []pubsub.Subscriber
+	tag         string
 }
 
 func NewTimePublisher() pubsub.Publisher {
 	return &timepub{
 		subscribers: make([]pubsub.Subscriber, 0),
+		tag:         "time_publisher",
 	}
 }
 
@@ -25,7 +27,7 @@ func (t *timepub) NotifyAll() {
 	message := time.Now().String()
 
 	for _, sub := range t.subscribers {
-		sub.Receive(message)
+		sub.Receive(message, t.tag)
 	}
 }
 

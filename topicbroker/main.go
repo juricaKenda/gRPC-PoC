@@ -6,12 +6,15 @@ import (
 )
 
 func main() {
+	topicBroker := broker.NewTopicBroker()
 
 	timepub := publishers.NewTimePublisher()
+	timepub.Subscribe(topicBroker)
 	timepub.Start()
 
 	numpub := publishers.NewNumberPublisher()
+	numpub.Subscribe(topicBroker)
 	numpub.Start()
-	topicBroker := broker.NewTopicBroker()
+
 	topicBroker.Start()
 }

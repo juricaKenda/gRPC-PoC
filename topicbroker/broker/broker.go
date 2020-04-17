@@ -5,6 +5,8 @@ import (
 )
 
 type TopicBroker struct {
+	timeChan chan string
+	numChan  chan string
 }
 
 func NewTopicBroker() *TopicBroker {
@@ -15,4 +17,8 @@ func NewTopicBroker() *TopicBroker {
 
 func (tb *TopicBroker) Start() {
 	fmt.Println("Topic broker starting..")
+}
+
+func (tb *TopicBroker) Receive(message, pubTag string) {
+	panic("implement me")
 }
