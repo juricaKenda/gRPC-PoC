@@ -11,13 +11,22 @@ type TopicBroker struct {
 
 func NewTopicBroker() *TopicBroker {
 	broker := new(TopicBroker)
-	broker.timeChan = make(chan string)
-	broker.numChan = make(chan string)
+	broker.timeChan = make(chan string, 1)
+	broker.numChan = make(chan string, 1)
 	return broker
 }
 
 func (tb *TopicBroker) Start() {
 	fmt.Println("Topic broker starting..")
+	for {
+		select {
+		case _ = <-tb.timeChan:
+			fmt.Println("received time!")
+		case _ = <-tb.numChan:
+			fmt.Println("received number!")
+
+		}
+	}
 }
 
 func (tb *TopicBroker) Receive(message, pubTag string) {

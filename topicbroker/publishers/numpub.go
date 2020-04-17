@@ -14,7 +14,7 @@ type numpub struct {
 func NewNumberPublisher() pubsub.Publisher {
 	return &numpub{
 		subscribers: make([]pubsub.Subscriber, 0),
-		tag:         "number_publisher",
+		tag:         "num_publisher",
 	}
 }
 
@@ -37,6 +37,6 @@ func (n *numpub) Subscribe(subscriber pubsub.Subscriber) {
 func (n *numpub) run() {
 	for {
 		n.NotifyAll()
-		time.Sleep(2 * time.Second)
+		time.Sleep(5 * time.Second)
 	}
 }
