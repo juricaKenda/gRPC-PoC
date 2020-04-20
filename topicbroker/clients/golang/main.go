@@ -12,9 +12,8 @@ func main() {
 	go fico.Listen("time")
 
 	kenda := startTopicClient(":50000", "kenda")
-	go kenda.Listen("num")
-	for {
-	}
+	go kenda.Listen("time")
+	select {}
 }
 
 func startTopicClient(target, name string) *support.TopicClient {
