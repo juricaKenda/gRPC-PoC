@@ -19,7 +19,7 @@ func NewTimePublisher() pubsub.Publisher {
 }
 
 func (t *timepub) Start() {
-	fmt.Println("Time publisher starting..")
+	fmt.Println("time_publisher starting..")
 	go t.run()
 }
 

@@ -19,7 +19,7 @@ func NewNumberPublisher() pubsub.Publisher {
 }
 
 func (n *numpub) Start() {
-	fmt.Println("Starting number publisher...")
+	fmt.Println("num_publisher starting...")
 	go n.run()
 }
 
