@@ -7,12 +7,22 @@ import (
 )
 
 func main() {
-	connection, err := grpc.Dial(":50000", grpc.WithInsecure())
+	fico := startTopicClient(":50000", "fico")
+	go fico.Listen("num")
+	go fico.Listen("time")
+
+	kenda := startTopicClient(":50000", "kenda")
+	go kenda.Listen("num")
+	for {
+	}
+}
+
+func startTopicClient(target, name string) *support.TopicClient {
+	connection, err := grpc.Dial(target, grpc.WithInsecure())
 	if err != nil {
 		panic(err)
 	}
-
 	serviceClient := proto.NewTopicServiceClient(connection)
-	client := support.NewTopicClient(serviceClient, "fico")
-	client.Listen("num")
+	client := support.NewTopicClient(serviceClient, name)
+	return client
 }
