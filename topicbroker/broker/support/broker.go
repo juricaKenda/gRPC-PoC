@@ -1,10 +1,10 @@
 package support
 
 import (
+	"github.com/juricaKenda/gRPC-PoC/topicbroker/infrastructure/publishers"
+	"github.com/juricaKenda/gRPC-PoC/topicbroker/infrastructure/pubsub"
+	"github.com/juricaKenda/gRPC-PoC/topicbroker/infrastructure/receiver"
 	proto "github.com/juricaKenda/gRPC-PoC/topicbroker/pb"
-	"github.com/juricaKenda/gRPC-PoC/topicbroker/publishers"
-	"github.com/juricaKenda/gRPC-PoC/topicbroker/pubsub"
-	"github.com/juricaKenda/gRPC-PoC/topicbroker/receiver"
 	"google.golang.org/grpc"
 	"net"
 )

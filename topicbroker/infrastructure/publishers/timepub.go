@@ -2,7 +2,7 @@ package publishers
 
 import (
 	"fmt"
-	"github.com/juricaKenda/gRPC-PoC/topicbroker/pubsub"
+	"github.com/juricaKenda/gRPC-PoC/topicbroker/infrastructure/pubsub"
 	"time"
 )
 
