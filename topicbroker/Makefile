@@ -4,7 +4,7 @@ gen:
 .PHONY: broker
 broker:
 	go build broker/main.go
-	go run broker/main.go $(ARGS)
+	go run broker/main.go
 
 .PHONY: gocli
 gocli:
