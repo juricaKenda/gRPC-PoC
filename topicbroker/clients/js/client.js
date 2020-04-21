@@ -1,6 +1,6 @@
 const grpc = require("grpc");
 const loader = require("@grpc/proto-loader");
-const pkg = loader.loadSync("../../proto/topics.proto", {});
+const pkg = loader.loadSync("proto/topics.proto", {});
 const grpcObject = grpc.loadPackageDefinition(pkg);
 const topicPkg = grpcObject.topics;
 

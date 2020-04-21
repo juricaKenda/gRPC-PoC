@@ -32,7 +32,7 @@ func (tb *TopicBroker) Start() {
 	}
 
 	server := grpc.NewServer()
-	proto.RegisterTopicServiceServer(server, NewTopicBroker())
+	proto.RegisterTopicServiceServer(server, tb)
 	err = server.Serve(lis)
 	if err != nil {
 		panic(err)

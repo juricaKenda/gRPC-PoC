@@ -10,3 +10,7 @@ broker:
 gocli:
 	go build clients/golang/main.go
 	go run clients/golang/main.go
+
+.PHONY: jscli
+jscli:
+	node clients/js/client.js
