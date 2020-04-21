@@ -4,7 +4,7 @@
     cd topicbroker/ 
     make broker
     make gocli 
-    node client.js
+    make jscli
 
 ## Expected result
 - delivered data is the same on each client subscribed to a topic (one client does not exclusively consume the topic update)
